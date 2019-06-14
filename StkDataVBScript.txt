@@ -1,0 +1,63 @@
+Sub Volume_Easy()
+
+'Loop thru all sheets
+For Each ws In Worksheets
+
+    'Set variable for holding ticker
+    Dim Ticker As String
+
+    'Set initial variable for holding volume per ticker
+    Dim Volume As Double
+    Volume = 0
+
+    'Keep track of the location for each credit card brand in the summary table
+    Dim Summary_Table_Row As Integer
+    Summary_Table_Row = 2
+
+    'Determine Last Row
+    Dim LRow As Long
+    LRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+
+    'Loop through all
+     For i = 2 To LRow
+
+        'Check if we are still within the same Ticker, if we are not...
+        If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+        
+            'Set Ticker Name
+            Ticker = ws.Cells(i, 1).Value
+    
+            'Add to the Volume
+            Volume = Volume + ws.Cells(i, 7).Value
+            
+            'Print Header Row
+            ws.Cells(1, 9).Value = "Ticker"
+            ws.Cells(1, 10).Value = "Total Stock Volume"
+            
+    
+            'Print the Ticker in the Summary Table
+            ws.Range("I" & Summary_Table_Row).Value = Ticker
+            'Print the Volume to the Summary Table
+            ws.Range("J" & Summary_Table_Row).Value = Volume
+    
+            'Add one to the summary table row
+            Summary_Table_Row = Summary_Table_Row + 1
+    
+            'Reset the Volume total
+            Volume = 0
+    
+        'If the cell immediately following a row is the same ticker...
+        Else
+    
+            'Add to the Volume
+            Volume = Volume + ws.Cells(i, 7).Value
+    
+        End If
+    
+    Next i
+    
+Next ws
+
+ MsgBox ("All Done")
+    
+End Sub
